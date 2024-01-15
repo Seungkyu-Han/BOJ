@@ -1,18 +1,23 @@
 import sys
 
-N, S = map(int, (sys.stdin.readline()).split())
+N, S = map(int, sys.stdin.readline().split())
 
-ans = list(map(int, (sys.stdin.readline()).split()))
+input_list = list(map(int, sys.stdin.readline().split()))
 
-result = [0, ]
 
-while ans:
-    tmp = []
-    for i in result:
-        tmp.append(i + ans[-1])
-        tmp.append(i)
-    ans.pop()
-    result = tmp
-result.pop()
+def find(param_list, cur_num):
+    if len(param_list) == 0:
+        if cur_num == S:
+            return 1
+        else:
+            return 0
 
-print(result.count(S))
+    return find(param_list[1:], cur_num + param_list[0]) + find(param_list[1:], cur_num)
+
+
+result = find(input_list, 0)
+
+if S == 0:
+    print(result - 1)
+else:
+    print(result)
