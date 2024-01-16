@@ -1,11 +1,24 @@
-N = int(input())
+import sys
 
-for i in range(int(N/5)+1,0,-1):
-    if (N-5*i)%3==0 and N-5*i>=0:
-        print(int(i+(N-5*i)/3))
-        exit()
-if(N%3==0):
-    print(int(N/3))
-    exit()
-else:
-    print(-1)
+N = int(sys.stdin.readline())
+
+sugar = [-1 for i in range(N + 3)]
+
+sugar[3] = 1
+sugar[4] = -1
+sugar[5] = 1
+
+for i in range(6, N+1):
+    if sugar[i-3] == -1 and sugar[i-5] == -1:
+        sugar[i] = -1
+
+    elif sugar[i-3] == -1:
+        sugar[i] = sugar[i-5] + 1
+
+    elif sugar[i-5] == -1:
+        sugar[i] = sugar[i-3] + 1
+
+    else:
+        sugar[i] = min(sugar[i-3], sugar[i-5]) + 1
+
+print(sugar[N])
