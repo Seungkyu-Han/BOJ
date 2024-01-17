@@ -1,16 +1,10 @@
-num = int(input())
+import sys
 
-prev = 1
-cur = 2
+n = int(sys.stdin.readline())
 
-if num == 1:
-    cur = 1
-elif num == 2:
-    cur = 2
-else:
-    for i in range(num-2):
-        tmp = cur + prev
-        prev = cur
-        cur = tmp
+square = [1 for i in range(n + 1)]
 
-print(cur % 10007)
+for i in range(2, n + 1):
+    square[i] = square[i-1] + square[i-2]
+
+print(square[-1] % 10007)
