@@ -1,14 +1,18 @@
-str1 = input()
-str2 = input()
+import sys
 
-result = [[0] * (len(str2) + 1) for i in range(len(str1) + 1)]
+first_word = list(sys.stdin.readline().strip())
+second_word = list(sys.stdin.readline().strip())
 
-for i in range(1, len(str1) + 1):
-    for t in range(1, len(str2) + 1):
-        if str1[i-1] == str2[t-1]:
-            result[i][t] = result[i-1][t-1] + 1
+max_length = max(len(first_word), len(second_word))
+
+dp = [[0 for i in range(max_length + 1)] for t in range(max_length + 1)]
+
+for i in range(len(first_word)):
+    for t in range(len(second_word)):
+        if first_word[i] == second_word[t]:
+            dp[i][t] = dp[i-1][t-1] + 1
         else:
-            result[i][t] = max(result[i-1][t], result[i][t-1])
+            dp[i][t] = max(dp[i][t-1], dp[i-1][t])
 
 
-print(result[-1][-1])
+print(dp[len(first_word) - 1][len(second_word) - 1])
