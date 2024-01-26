@@ -1,17 +1,14 @@
 import sys
 
-N, K = map(int, sys.stdin.readline().split())
+n, k = map(int, sys.stdin.readline().split())
 
-coin = []
+value = [0 for i in range(k+1)]
 
-for i in range(N):
-    coin.append(int(sys.stdin.readline()))
+for i in range(n):
+    coin = int(sys.stdin.readline().strip())
+    if coin <= k:
+        value[coin] += 1
+    for t in range(1, (k+1) - coin):
+        value[t+coin] += value[t]
 
-result = [0] * (K + 1)
-result[0] = 1
-
-for i in range(N):
-    for t in range(K - coin[i] + 1):
-        result[t + coin[i]] += result[t]
-
-print(result[-1])
+print(value[-1])
