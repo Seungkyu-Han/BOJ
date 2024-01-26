@@ -1,23 +1,20 @@
 import sys
 
-num = int(sys.stdin.readline())
+n = int(sys.stdin.readline())
 
-score = [0] * num
+max_list = [0 for i in range(n)]
 
-for i in range(num):
-    score[i] = list(map(int, sys.stdin.readline().split()))
+for i in range(n):
+    level = list(map(int, sys.stdin.readline().split()))
+    cur_max_list = list()
 
-total = [score[0][0]]
-
-for i in range(1, num):
-    tmp = []
-    for t in range(i + 1):
+    for t in range(i+1):
         if t == 0:
-            tmp.append(total[0] + score[i][0])
+            cur_max_list.append(max_list[0] + level[0])
         elif t == i:
-            tmp.append(total[-1] + score[i][-1])
+            cur_max_list.append(max_list[-1] + level[i])
         else:
-            tmp.append(max(total[t-1], total[t]) + score[i][t])
-    total = tmp
+            cur_max_list.append(max(max_list[t-1], max_list[t]) + level[t])
+    max_list = cur_max_list
 
-print(max(total))
+print(max(max_list))
