@@ -1,15 +1,14 @@
 import sys
 
-num = int(sys.stdin.readline())
+N = int(sys.stdin.readline().strip())
 
-mytime = list(map(int, sys.stdin.readline().split()))
+P = sorted(list(map(int, sys.stdin.readline().split())))
 
-mytime.sort()
-
+cur_time = 0
 result = 0
 
-for i in range(num, 0, -1):
-    result += (mytime.pop(0)) * i
+for i in P:
+    cur_time += i
+    result += cur_time
 
 print(result)
-
