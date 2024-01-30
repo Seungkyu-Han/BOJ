@@ -1,23 +1,15 @@
 import sys
 
-cnt = int(input())
+meeting = sorted([list(map(int, sys.stdin.readline().split())) for i in range(int(sys.stdin.readline().strip()))],
+                 key=lambda x: (x[1], x[0]))
 
-ans = [[0, 0] for i in range(cnt)]
-total = 0
+time = 0
+result = 0
 
-for i in range(cnt):
-    start, end = map(int, sys.stdin.readline().split())
-    ans[i] = [start, end]
+while meeting:
+    start_time, end_time = meeting.pop(0)
+    if start_time >= time and end_time < 2 ** 31:
+        time = end_time
+        result += 1
 
-ans = sorted(ans, key=lambda a: a[0])
-ans = sorted(ans, key=lambda a: a[1])
-
-prev = 0
-total = 0
-
-for start, end in ans:
-    if start >= prev:
-        total += 1
-        prev = end
-
-print(total)
+print(result)
