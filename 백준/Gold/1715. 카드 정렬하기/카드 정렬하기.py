@@ -1,20 +1,18 @@
-import heapq
 import sys
+import heapq
 
-N = int(input())
+heap = []
 
-card = []
-
-for i in range(N):
-    tmp = int(sys.stdin.readline())
-    heapq.heappush(card, tmp)
+for _ in range(int(sys.stdin.readline().strip())):
+    heapq.heappush(heap, int(sys.stdin.readline().strip()))
 
 result = 0
 
-for i in range(N - 1):
-    first = heapq.heappop(card)
-    second = heapq.heappop(card)
-    plus = first + second
-    result += plus
-    heapq.heappush(card, plus)
+while len(heap) > 1:
+    A = heapq.heappop(heap)
+    B = heapq.heappop(heap)
+
+    result += (A + B)
+    heapq.heappush(heap, A + B)
+
 print(result)
