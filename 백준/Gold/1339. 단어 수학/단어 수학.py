@@ -1,28 +1,23 @@
 import sys
 
-N = int(sys.stdin.readline())
+word = [0 for i in range(ord('Z') - ord('A') + 1)]
 
-words = [[] for i in range(8)]
+for i in range(int(sys.stdin.readline().strip())):
 
-for i in range(N):
-    tmp = list(sys.stdin.readline().strip())
-    for t in range(len(tmp)):
-        words[t].append(tmp[len(tmp) - t - 1])
+    input_word = str(sys.stdin.readline().strip())
 
-alpha = [0] * 26
+    cur_index = 1
 
-for i in range(8):
-    if not words[i]:
-        break
+    while input_word:
+        word[ord(input_word[-1]) - ord('A')] += cur_index
+        cur_index *= 10
+        input_word = input_word[:-1]
 
-    for al in words[i]:
-        alpha[ord(al) - 65] += 10 ** i
-
-alpha.sort(reverse=True)
+word.sort(reverse=True)
 
 result = 0
 
 for i in range(10):
-    result += alpha[i] * (9 - i)
+    result += (word[i] * (9-i))
 
 print(result)
