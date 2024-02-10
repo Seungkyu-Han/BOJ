@@ -1,32 +1,36 @@
 import sys
-from collections import deque
 
-rep_cnt = int(sys.stdin.readline())
-for rep in range(rep_cnt):
+for _ in range(int(sys.stdin.readline().strip())):
+
     M, N, K = map(int, sys.stdin.readline().split())
 
-    total_veg = [[False] * M for i in range(N)]
-    veg = deque()
+    land = [[0 for _ in range(M)] for _ in range(N)]
 
-    for i in range(K):
+    for _ in range(K):
         m, n = map(int, sys.stdin.readline().split())
-        veg.append([n, m])
-        total_veg[n][m] = True
+        land[n][m] = 1
 
-    cnt = 0
+    result = 0
 
-    while veg:
-        tn, tm = veg.popleft()
-        if not(total_veg[tn][tm]):
-            continue
-        need_visit = deque()
-        need_visit.append([tn, tm])
-        total_veg[tn][tm] = False
-        while need_visit:
-            n, m = need_visit.popleft()
-            for n_ptr, m_ptr in ((n - 1, m), (n + 1, m), (n, m - 1), (n, m + 1)):
-                if 0 <= n_ptr < N and 0 <= m_ptr < M and total_veg[n_ptr][m_ptr]:
-                    need_visit.append([n_ptr, m_ptr])
-                    total_veg[n_ptr][m_ptr] = False
-        cnt += 1
-    print(cnt)
+    visited = [[False for _ in range(M)] for _ in range(N)]
+
+    for n in range(N):
+        for m in range(M):
+            if visited[n][m] or land[n][m] == 0:
+                continue
+
+            result += 1
+
+            need_visit = [[n, m]]
+            visited[n][m] = False
+
+            while need_visit:
+
+                cur_n, cur_m = need_visit.pop()
+
+                for next_n, next_m in [[cur_n, cur_m + 1], [cur_n, cur_m - 1], [cur_n + 1, cur_m], [cur_n - 1, cur_m]]:
+                    if 0 <= next_n < N and 0 <= next_m < M:
+                        if land[next_n][next_m] == 1 and visited[next_n][next_m] is False:
+                            need_visit.append([next_n, next_m])
+                            visited[next_n][next_m] = True
+    print(result)
