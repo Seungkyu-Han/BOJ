@@ -10,6 +10,7 @@ for _ in range(V):
     for e in range(1, len(c) - 2, 2):
         graph[c[0]].append((c[e], c[e + 1]))
 
+
 def bfs(target):
     weight = [-1] * (V + 1)
     weight[target] = 0
