@@ -1,17 +1,39 @@
-N = int(input())
-input()
-ans = input()
+import sys
 
-result = 'IO' * N + 'I'
+N = int(sys.stdin.readline().strip())
 
-mylen = 2 * N + 1
+M = int(sys.stdin.readline().strip())
 
-total = 0
+IOI = list(sys.stdin.readline().strip())
 
+count = 0
+result = 0
 
-for i in range(len(ans) - mylen):
-    if ans[i] == 'I':
-        if ans[i:i + mylen] == result:
-            total += 1
+first = False
+second = False
 
-print(total)
+for i in range(len(IOI)):
+    cur_char = IOI[i]
+    if cur_char == 'I':
+        if first and second:
+            second = False
+            count += 1
+            if count >= N:
+                result += 1
+        else:
+            first = True
+            second = False
+            count = 0
+    else:
+        if first and second:
+            first = False
+            second = False
+            count = 0
+        elif first:
+            second = True
+        else:
+            first = False
+            second = False
+            count = 0
+
+print(result)
