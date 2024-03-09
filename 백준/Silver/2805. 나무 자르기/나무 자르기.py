@@ -1,23 +1,24 @@
-def wood(lista, n, height):
-    total = 0
-    for i in range(n):
-        if lista[i] - height > 0:
-            total += lista[i] - height
+import sys
 
-    return total
+N, M = map(int, sys.stdin.readline().split())
+
+tree = list(map(int, sys.stdin.readline().split()))
 
 
-N, M = map(int, input().split())
+def cut(height):
+    result = 0
+    for i in tree:
+        result += max(0, i - height)
+    return result
 
-list1 = list(map(int, input().split()))
 
-left, right = 0, max(list1)
+left, right = 0, max(tree)
 
 while left <= right:
     mid = (left + right) // 2
-    mywood = wood(list1, N, mid)
+    cur_height = cut(mid)
 
-    if mywood >= M:
+    if cur_height >= M:
         left = mid + 1
     else:
         right = mid - 1
