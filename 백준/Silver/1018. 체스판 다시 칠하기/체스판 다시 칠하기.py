@@ -1,28 +1,32 @@
-n, m = map(int, input().split())
+import sys
 
-list1 = []
-count = []
+N, M = map(int, sys.stdin.readline().split())
 
-for i in range(n):
-    list1.append(input())
+square = []
 
-for i in range(n-7):
-    for t in range(m-7):
-        cnt1 = 0
-        cnt2 = 0
-        for q in range(i, i+8):
-            for w in range(t, t+8):
-                if (q + w) % 2 == 0:
-                    if list1[q][w] != 'W':
-                        cnt1 += 1
-                    if list1[q][w] != 'B':
-                        cnt2 += 1
-                else:
-                    if list1[q][w] != 'B':
-                        cnt1 += 1
-                    if list1[q][w] != 'W':
-                        cnt2 += 1
+# B, W
+board = [[[0 for i in range(M)] for t in range(N)] for k in range(2)]
 
-        count.append(min(cnt1, cnt2))
+for _ in range(N):
+    square.append(sys.stdin.readline().strip())
 
-print(min(count))
+for i in range(N):
+    for t in range(M):
+        if (square[i][t] == 'W' and (i + t) % 2 == 0) or (square[i][t] == 'B' and (i + t) % 2 != 0):
+            board[0][i][t] = 1
+        else:
+            board[1][i][t] = 1
+
+result = 64
+
+for i in range(N - 7):
+    for t in range(M - 7):
+        tmp = [0, 0]
+        for k in range(8):
+            for m in range(8):
+                tmp[0] += board[0][i + k][t + m]
+                tmp[1] += board[1][i + k][t + m]
+
+        result = min(result, min(tmp))
+
+print(result)
