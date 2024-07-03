@@ -1,14 +1,15 @@
-def isPrime(num):
-    if num==1:
-        return False
-    else:
-        for i in range(2, int(num**0.5)+1):
-            if num%i == 0:
-                return False
-        return True
+import sys
+import math
 
-M, N = map(int, input().split())
+M, N = map(int, sys.stdin.readline().split())
 
-for i in range(M, N+1):
-    if isPrime(i):
+prime = [True for i in range(N + 1)]
+
+for i in range(2, math.floor(math.sqrt(N)) + 1):
+    if prime[i]:
+        for t in range(2 * i, N + 1, i):
+            prime[t] = False
+
+for i in range(max(2, M), N + 1):
+    if prime[i]:
         print(i)
