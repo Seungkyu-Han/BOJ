@@ -1,26 +1,30 @@
-def printfunc(list1, num):
-    mylist = list(list1)
-    count = 0
-    while True:
-        if mylist[0] == max(mylist):
-            if num == 0:
-                count += 1
-                return count
+import sys
+import heapq
+from collections import deque
+
+for _ in range(int(sys.stdin.readline())):
+    N, M = map(int, sys.stdin.readline().split())
+
+    print_list = list(map(int, sys.stdin.readline().split()))
+
+    print_queue = deque()
+    print_heap = []
+
+    for i in range(len(print_list)):
+        print_queue.append([print_list[i], i])
+        heapq.heappush(print_heap,  -1 * print_list[i])
+
+    count = 1
+
+    while print_queue:
+
+        if print_queue[0][0] == print_heap[0] * -1:
+            if print_queue[0][1] == M:
+                break
             else:
+                print_queue.popleft(), heapq.heappop(print_heap)
                 count += 1
-                mylist.pop(0)
-                num -= 1
         else:
-            if num == 0:
-                num = len(mylist) - 1
-            else:
-                num -= 1
-            mylist.append(mylist.pop(0))
+            print_queue.append(print_queue.popleft())
 
-
-n = int(input())
-
-for i in range(n):
-    N, M = map(int, input().split())
-    list_x = list(map(int, input().split()))
-    print(printfunc(list_x, M))
+    print(count)
