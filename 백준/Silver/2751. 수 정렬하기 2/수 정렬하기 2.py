@@ -1,8 +1,9 @@
-num = int(input())
+import sys
 
-list1 = [int(input()) for i in range(num)]
+input_numbers = list()
 
-list1.sort()
+for _ in range(int(sys.stdin.readline())):
+    input_numbers.append(int(sys.stdin.readline()))
 
-for i in list1:
-    print(i)
+for number in sorted(input_numbers):
+    print(number)
