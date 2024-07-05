@@ -1,14 +1,16 @@
-num = int(input())
+N = int(input())
 
-count = 1
-rg = 1
+start = 1
+end = 7
 
-if num == 1:
+index = 1
+
+while not (start <= N <= end):
+    start = end + 1
+    index += 1
+    end += (index * 6)
+
+if N == 1:
     print(1)
-    exit()
-
-while not(rg < num <= rg + 6 * count):
-    rg += 6 * count
-    count += 1
-
-print(count+1)
+else:
+    print(index + 1)
