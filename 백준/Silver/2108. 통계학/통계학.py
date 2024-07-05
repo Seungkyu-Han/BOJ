@@ -1,40 +1,19 @@
-from collections import Counter
 import sys
+from collections import Counter
 
+input_numbers = []
 
-def average(listx):
-    total = sum(listx)
+for _ in range(int(sys.stdin.readline())):
+    input_numbers.append(int(sys.stdin.readline()))
 
-    result = sum(listx)//len(listx) if sum(listx)/len(listx) - sum(listx)//len(listx) < 0.5 else sum(listx)//len(listx) + 1
-    return result
+input_numbers.sort()
 
+print(round((sum(input_numbers))/(len(input_numbers))))
+print(input_numbers[len(input_numbers) // 2])
+if len(input_numbers) > 1:
+    counter = Counter(input_numbers).most_common(2)
+    print(counter[0][0] if counter[0][1] != counter[1][1] else counter[1][0])
+else:
+    print(input_numbers[0])
+print(input_numbers[-1] - input_numbers[0])
 
-def middle(listx):
-    return listx[int((len(list1) - 1) / 2)]
-
-
-def maxcnt(listx):
-    counter = Counter(listx).most_common(2)
-    if len(counter) > 1:
-        if counter[0][1] == counter[1][1]:
-            print(counter[1][0])
-        else:
-            print(counter[0][0])
-    else:
-        print(counter[0][0])
-
-
-def myrange(listx):
-    return max(listx) - min(listx)
-
-
-num = int(sys.stdin.readline())
-
-list1 = [int(sys.stdin.readline()) for i in range(num)]
-
-list1.sort()
-
-print(average(list1))
-print(middle(list1))
-maxcnt(list1)
-print(myrange(list1))
