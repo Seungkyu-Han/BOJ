@@ -1,24 +1,10 @@
-import sys
+N = int(input())
 
-N = int(sys.stdin.readline())
+dp = [float('inf') for i in range(max(6, N + 1))]
 
-sugar = [-1 for i in range(N + 3)]
+dp[3], dp[5] = 1, 1
 
-sugar[3] = 1
-sugar[4] = -1
-sugar[5] = 1
+for i in range(6, N + 1):
+    dp[i] = min(dp[i - 3], dp[i - 5]) + 1
 
-for i in range(6, N+1):
-    if sugar[i-3] == -1 and sugar[i-5] == -1:
-        sugar[i] = -1
-
-    elif sugar[i-3] == -1:
-        sugar[i] = sugar[i-5] + 1
-
-    elif sugar[i-5] == -1:
-        sugar[i] = sugar[i-3] + 1
-
-    else:
-        sugar[i] = min(sugar[i-3], sugar[i-5]) + 1
-
-print(sugar[N])
+print(dp[N] if dp[N] != float('inf') else -1)
