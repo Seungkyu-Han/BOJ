@@ -1,24 +1,30 @@
+from collections import deque
 import sys
 
-num = int(sys.stdin.readline())
+queue = deque()
 
-list1 = []
+for _ in range(int(sys.stdin.readline())):
+    command = list(map(str, sys.stdin.readline().split()))
 
-for i in range(num):
-    ans = sys.stdin.readline().split()
-    if ans[0] == 'push':
-        list1.append(int(ans[1]))
-    elif ans[0] == 'pop':
-        if len(list1) == 0:
-            print(-1)
+    if command[0] == 'push':
+        queue.append(int(command[1]))
+    elif command[0] == 'pop':
+        print(queue.popleft() if queue else -1)
+    elif command[0] == 'size':
+        print(len(queue))
+    elif command[0] == 'empty':
+        print(0 if queue else 1)
+    elif command[0] == 'front':
+        if queue:
+            data = queue.popleft()
+            print(data)
+            queue.appendleft(data)
         else:
-            print(list1.pop(0))
-    elif ans[0] == 'size':
-        print(len(list1))
-    elif ans[0] == 'empty':
-        print(1 if len(list1) == 0 else 0)
-    elif ans[0] == 'front':
-        print(-1 if len(list1) == 0 else list1[0])
-    elif ans[0] == 'back':
-        print(-1 if len(list1) == 0 else list1[len(list1) - 1])
-
+            print(-1)
+    elif command[0] == 'back':
+        if queue:
+            data = queue.pop()
+            print(data)
+            queue.append(data)
+        else:
+            print(-1)
