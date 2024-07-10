@@ -1,12 +1,14 @@
-num = int(input())
+import sys
 
-list1 = []
+stack = []
 
-for i in range(num):
-    plus = int(input())
-    if plus == 0:
-        list1.pop()
+for _ in range(int(sys.stdin.readline())):
+
+    money = int(sys.stdin.readline())
+
+    if money > 0:
+        stack.append(money)
     else:
-        list1.append(plus)
+        stack.pop()
 
-print(sum(list1))
+print(sum(stack))
