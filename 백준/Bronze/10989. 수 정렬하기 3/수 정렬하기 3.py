@@ -1,13 +1,10 @@
 import sys
 
-num = int(sys.stdin.readline())
+arr = [0 for i in range(10001)]
 
-list1 = [0] * 10001
+for _ in range(int(sys.stdin.readline())):
+    arr[int(sys.stdin.readline())] += 1
 
-for i in range(num):
-    list1[int(sys.stdin.readline())] += 1
-
-for i in range(10001):
-    if list1[i] != 0:
-        for j in range(list1[i]):
-            print(i)
+for i in range(1, 10001):
+    for _ in range(arr[i]):
+        print(i)
