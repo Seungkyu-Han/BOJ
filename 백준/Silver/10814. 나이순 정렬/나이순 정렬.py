@@ -1,12 +1,10 @@
-num = int(input())
+import sys
 
-list1 = []
+judge = []
 
-for i in range(num):
-    age, name = map(str, input().split())
-    list1.append([int(age), i, name])
+for i in range(int(sys.stdin.readline())):
+    age, name = map(str, sys.stdin.readline().split())
+    judge.append([int(age), i, name])
 
-list1.sort()
-
-for k in list1:
-    print(k[0], k[2])
+for age, i, name in list(sorted(judge)):
+    print(f'{age} {name}')
