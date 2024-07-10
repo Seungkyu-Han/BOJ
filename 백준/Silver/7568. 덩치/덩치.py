@@ -1,9 +1,6 @@
 import sys
 
-size = []
-
-for i in range(int(sys.stdin.readline())):
-    size.append(list(map(int, sys.stdin.readline().split())))
+size = [list(map(int, sys.stdin.readline().split())) for _ in range(int(sys.stdin.readline()))]
 
 for standard_weight, standard_height in size:
     rank = 1
