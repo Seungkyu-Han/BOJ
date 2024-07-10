@@ -1,10 +1,18 @@
-num = int(input())
+import sys
+from collections import deque
 
-for _ in range(num):
-    str1 = input()
-    while '()' in str1:
-        str1 = str1.replace('()', '')
-    if len(str1) == 0:
-        print('YES')
-    else:
-        print('NO')
+
+def parenthesis(ps):
+    stack = deque()
+    for ch in ps:
+        if ch == '(':
+            stack.append(ch)
+        else:
+            if not stack or stack.pop() != '(':
+                return False
+    return True if len(stack) == 0 else False
+
+
+for _ in range(int(sys.stdin.readline())):
+    input_string = sys.stdin.readline().strip()
+    print('YES' if parenthesis(input_string) else 'NO')
