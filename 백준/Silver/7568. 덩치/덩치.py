@@ -1,10 +1,14 @@
-num = int(input())
+import sys
 
-list1 = [list(map(int, input().split())) for i in range(num)]
+size = []
 
-for i in range(num):
+for i in range(int(sys.stdin.readline())):
+    size.append(list(map(int, sys.stdin.readline().split())))
+
+for standard_weight, standard_height in size:
     rank = 1
-    for j in range(num):
-        if list1[i][0] < list1[j][0] and list1[i][1] < list1[j][1]:
+    for weight, height in size:
+        if weight > standard_weight and height > standard_height:
             rank += 1
-    print(rank, end=' ')
+
+    print(rank)
