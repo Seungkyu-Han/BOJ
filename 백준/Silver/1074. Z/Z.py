@@ -1,26 +1,21 @@
-def gogo(n, a, b):
-    if n == 1:
-        if a == 0 and b == 0:
-            return 1
-        elif a == 0:
-            return 2
-        elif b == 0:
-            return 3
-        else:
-            return 4
-    length = 2 ** (n - 1)
-    cnt = length ** 2
-    if a < length and b < length:
-        cnt = 0
-    elif a < length:
-        pass
-    elif b < length:
-        cnt *= 2
+import sys
+
+N, r, c = map(int, sys.stdin.readline().split())
+
+
+def z(n, cur_r, cur_c):
+    if n == 0:
+        return 0
+    size = 2 ** n
+    plus = (size // 2) ** 2
+    if cur_r < size // 2 and cur_c < size // 2:
+        return z(n - 1, cur_r, cur_c)
+    elif cur_r < size // 2 <= cur_c:
+        return z(n - 1, cur_r, cur_c - size // 2) + plus
+    elif cur_c < size // 2 <= cur_r:
+        return z(n - 1, cur_r - size // 2, cur_c) + plus * 2
     else:
-        cnt *= 3
-    return cnt + gogo(n - 1, a % length, b % length)
+        return z(n - 1, cur_r - size // 2, cur_c - size // 2) + plus * 3
 
 
-N, r, c = map(int, input().split())
-
-print(gogo(N, r, c) - 1)
+print(z(N, r, c))
