@@ -1,25 +1,15 @@
-N, M = map(int, input().split())
+from collections import deque
+import sys
 
-list1 = [i + 1 for i in range(N)]
+N, K = map(int, sys.stdin.readline().split())
 
-cnt = 1
+queue = deque([i+1 for i in range(N)])
 
-result = []
+print("<", end='')
 
-while len(list1) > 0:
-    if cnt == M:
-        result.append(list1.pop(0))
-        cnt = 1
-    else:
-        list1.append(list1.pop(0))
-        cnt += 1
+for i in range(N - 1):
+    for t in range(K - 1):
+        queue.append(queue.popleft())
+    print(queue.popleft(), end=", ")
 
-print('<', end='')
-
-for i in range(len(result)):
-    if i == len(result) - 1:
-        print(result[i], end='')
-    else:
-        print(result[i], end=', ')
-
-print('>', end='')
+print(queue.popleft(), end=">\n")
