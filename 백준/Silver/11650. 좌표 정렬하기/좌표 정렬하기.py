@@ -1,11 +1,4 @@
-num = int(input())
+import sys
 
-list1 = []
-
-for i in range(num):
-    list1.append(list(map(int, input().split())))
-
-list1.sort()
-
-for k in list1:
-    print('{} {}' .format(k[0], k[1]))
+for x, y in list(sorted([list(map(int, sys.stdin.readline().split())) for _ in range(int(sys.stdin.readline().strip()))])):
+    print(x, y)
