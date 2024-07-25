@@ -1,15 +1,18 @@
-num = int(input())
+import sys
 
-score = [0] * 300
+N = int(sys.stdin.readline())
 
-for i in range(num):
-    score[i] = int(input())
+step = [0 for _ in range(300)]
+dp = [0 for _ in range(300)]
 
-step = [0] * 300
-step[0] = score[0]
-step[1] = score[0] + score[1]
-step[2] = max(score[0], score[1]) + score[2]
-for i in range(3, num):
-    step[i] = max(step[i-2], step[i-3] + score[i-1]) + score[i]
+for i in range(N):
+    step[i] = int(sys.stdin.readline())
 
-print(step[num - 1])
+dp[0] = step[0]
+dp[1] = step[0] + step[1]
+dp[2] = max(step[0], step[1]) + step[2]
+
+for i in range(3, N):
+    dp[i] = max(dp[i - 2], dp[i - 3] + step[i - 1]) + step[i]
+
+print(dp[N - 1])
