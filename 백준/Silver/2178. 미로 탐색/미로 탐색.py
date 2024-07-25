@@ -1,25 +1,28 @@
-from collections import deque
 import sys
 
 N, M = map(int, sys.stdin.readline().split())
 
-miro = [list(sys.stdin.readline().strip()) for i in range(N)]
+miro = [list(map(int, sys.stdin.readline().strip())) for _ in range(N)]
+visited = [[float('inf') for _ in range(M)] for _ in range(N)]
 
-visited = [[0] * M for t in range(N)]
+bfs = [[0, 0, 0]]
 
-need_visit = deque()
-need_visit.append((0, 0))
+result = -1
 
-visited[0][0] = 1
+dx = [1, 0, -1, 0]
+dy = [0, 1, 0, -1]
 
-while need_visit:
-    n, m = need_visit.popleft()
+while bfs:
+    count, x, y = bfs.pop(0)
 
-    if n == N - 1 and m == M - 1:
-        print(visited[n][m])
+    if x == N - 1 and y == M - 1:
+        result = count
         break
 
-    for n_ptr, m_ptr in ((n - 1, m), (n + 1, m), (n, m - 1), (n, m + 1)):
-        if 0 <= n_ptr < N and 0 <= m_ptr < M and visited[n_ptr][m_ptr] == 0 and miro[n_ptr][m_ptr] == '1':
-            visited[n_ptr][m_ptr] = visited[n][m] + 1
-            need_visit.append((n_ptr, m_ptr))
+    for i in range(4):
+        if 0 <= x + dx[i] < N and 0 <= y + dy[i] < M and miro[x + dx[i]][y + dy[i]] == 1 and visited[x + dx[i]][y + dy[i]] > count + 1:
+            bfs.append([count + 1, x + dx[i], y + dy[i]])
+            visited[x + dx[i]][y + dy[i]] = count + 1
+
+
+print(result + 1)
