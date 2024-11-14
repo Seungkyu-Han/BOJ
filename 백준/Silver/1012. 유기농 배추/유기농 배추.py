@@ -1,36 +1,33 @@
 import sys
 
-for _ in range(int(sys.stdin.readline().strip())):
+for _ in range(int(sys.stdin.readline())):
+    M ,N, K = map(int, sys.stdin.readline().split())
 
-    M, N, K = map(int, sys.stdin.readline().split())
-
-    land = [[0 for _ in range(M)] for _ in range(N)]
+    cabbage = [[0 for _ in range(M)] for _ in range(N)]
 
     for _ in range(K):
-        m, n = map(int, sys.stdin.readline().split())
-        land[n][m] = 1
+
+        X, Y = map(int, sys.stdin.readline().split())
+
+        cabbage[Y][X] = 1
 
     result = 0
 
-    visited = [[False for _ in range(M)] for _ in range(N)]
+    for x in range(M):
+        for y in range(N):
+            if cabbage[y][x] == 1:
+                result += 1
+                need_visit = [(x, y)]
+                cabbage[y][x] = 2
 
-    for n in range(N):
-        for m in range(M):
-            if visited[n][m] or land[n][m] == 0:
-                continue
+                while need_visit:
 
-            result += 1
+                    cur_x, cur_y = need_visit.pop()
 
-            need_visit = [[n, m]]
-            visited[n][m] = False
+                    for dx, dy in [(cur_x - 1, cur_y), (cur_x + 1, cur_y), (cur_x, cur_y - 1), (cur_x, cur_y + 1)]:
+                        if 0 <= dx < M and 0 <= dy < N:
+                            if cabbage[dy][dx] == 1:
+                                need_visit.append((dx, dy))
+                                cabbage[dy][dx] = 2
 
-            while need_visit:
-
-                cur_n, cur_m = need_visit.pop()
-
-                for next_n, next_m in [[cur_n, cur_m + 1], [cur_n, cur_m - 1], [cur_n + 1, cur_m], [cur_n - 1, cur_m]]:
-                    if 0 <= next_n < N and 0 <= next_m < M:
-                        if land[next_n][next_m] == 1 and visited[next_n][next_m] is False:
-                            need_visit.append([next_n, next_m])
-                            visited[next_n][next_m] = True
     print(result)
