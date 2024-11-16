@@ -1,20 +1,12 @@
-N, M = map(int, input().split())
+import sys
 
-pocketmon = {}
-list1 = []
+M, N = map(int, sys.stdin.readline().split())
 
-for i in range(N):
-    pocketmon[i] = input()
+pokemon = [sys.stdin.readline().strip() for _ in range(M)]
 
-for i in range(M):
-    list1.append(input())
-
-valueList = list(pocketmon.values())
-
-
-for i in range(M):
-    if list1[i].isnumeric():
-        target = int(list1[i]) - 1
-        print(pocketmon[target])
+for _ in range(N):
+    question = sys.stdin.readline().rstrip()
+    if question.isnumeric():
+        print(pokemon[int(question) - 1])
     else:
-        print(valueList.index(list1[i]) + 1)
+        print(pokemon.index(question) + 1)
