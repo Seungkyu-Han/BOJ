@@ -1,21 +1,21 @@
+import sys
 from collections import deque
 
-N, K = map(int, input().split())
+N, K = map(int, sys.stdin.readline().split())
 
-time = 0
-location = {N}
-visited = [True for i in range(100001)]
-visited[N] = False
+need_visit = deque()
+need_visit.append([0, N])
+visited = [False for _ in range(100001)]
+visited[N] = True
 
-while visited[K]:
-    tmp = deque()
+while need_visit:
+    cur_count, cur_position = need_visit.popleft()
 
-    for i in location:
-        for t in (i - 1, i + 1, i * 2):
-            if 0 <= t <= 100000 and visited[t]:
-                visited[t] = False
-                tmp.append(t)
-    location = set(tmp)
-    time += 1
+    if cur_position == K:
+        print(cur_count)
+        break
 
-print(time)
+    for next_position in [cur_position + 1, cur_position - 1, cur_position * 2]:
+         if 0 <= next_position <= 100000 and visited[next_position] is False:
+            need_visit.append([cur_count + 1, next_position])
+            visited[next_position] = True
