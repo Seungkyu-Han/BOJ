@@ -1,27 +1,33 @@
-ans = input()
+import sys
 
+input_str = list(sys.stdin.readline().strip())
 
-tmp = ""
-result = []
-for i in ans:
-    if i.isnumeric():
-        tmp += i
+expr = list()
+
+cur = ''
+
+for ch in input_str:
+    if ch == '+' or ch == '-':
+        expr.append(int(cur))
+        cur = ''
+        expr.append(ch)
     else:
-        result.append(int(tmp))
-        tmp = ""
-        result.append(i)
-result.append(int(tmp))
+        cur += ch
 
-total = 0
-cnt = 0
+expr.append(int(cur))
 
-for i in range(len(result), 0, -1):
-    i -= 1
-    if type(result[i]) is int:
-        cnt += result[i]
-    elif result[i] == '-':
-        total -= cnt
-        cnt = 0
+result = 0
+flag = True
 
-total += cnt
-print(total)
+
+for cur_expr in expr:
+    if cur_expr == '-' and flag:
+        flag = False
+
+    if cur_expr != '+' and cur_expr != '-':
+        if flag:
+            result += cur_expr
+        else:
+            result -= cur_expr
+
+print(result)
