@@ -1,19 +1,25 @@
 import sys
+import heapq
 
 N, M = map(int, sys.stdin.readline().split())
 
-set1 = set()
-set2 = set()
+person = {}
 
-for i in range(N):
-    set1.add(sys.stdin.readline().strip())
+for _ in range(N):
+    person[sys.stdin.readline().strip()] = 1
 
-for i in range(M):
-    set2.add(sys.stdin.readline().strip())
+for _ in range(M):
+    who = sys.stdin.readline().strip()
+    if who in person:
+        person[who] += 1
 
-result = sorted(list(set1 & set2))
+heap = []
 
-print(len(result))
+for k, v in person.items():
+    if v == 2:
+        heapq.heappush(heap, k)
 
-for i in result:
-    print(i)
+print(len(heap))
+
+while heap:
+    print(heapq.heappop(heap))
