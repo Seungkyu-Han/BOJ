@@ -1,24 +1,27 @@
-cnt = int(input())
+import sys
 
-num = int(input())
+N = int(sys.stdin.readline().strip())
 
-graph = dict()
+graph = {}
 
-for i in range(cnt):
+for i in range(N):
     graph[i+1] = []
 
-for i in range(num):
-    a, b = map(int, input().split())
-    graph[a].append(b)
-    graph[b].append(a)
+for _ in range(int(sys.stdin.readline().strip())):
+    v1, v2 = map(int, sys.stdin.readline().strip().split())
+    graph[v1].append(v2)
+    graph[v2].append(v1)
 
+visited = [False for i in range(N + 1)]
+visited[1] = True
 need_visit = [1]
-visited = []
 
 while need_visit:
-    data = need_visit.pop()
-    if data not in visited:
-        need_visit.extend(graph[data])
-        visited.append(data)
+    v = need_visit.pop(0)
 
-print(len(visited) - 1)
+    for w in graph[v]:
+        if not visited[w]:
+            visited[w] = True
+            need_visit.append(w)
+
+print(visited.count(True) - 1)
