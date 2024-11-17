@@ -2,17 +2,18 @@ import sys
 
 N = int(sys.stdin.readline())
 
-step = [0 for _ in range(300)]
-dp = [0 for _ in range(300)]
+stair = [int(sys.stdin.readline()) for _ in range(N)]
 
-for i in range(N):
-    step[i] = int(sys.stdin.readline())
+if N == 1:
+    print(stair[0])
+elif N == 2:
+    print(stair[0] + stair[1])
+elif N == 3:
+    print(max(stair[0], stair[1]) + stair[2])
+elif N >= 4:
+    dp = [stair[0], stair[0] + stair[1], max(stair[0], stair[1]) + stair[2]]
 
-dp[0] = step[0]
-dp[1] = step[0] + step[1]
-dp[2] = max(step[0], step[1]) + step[2]
+    for i in range(3, N):
+        dp.append(stair[i] + max(dp[-2], dp[-3] + stair[i-1]))
 
-for i in range(3, N):
-    dp[i] = max(dp[i - 2], dp[i - 3] + step[i - 1]) + step[i]
-
-print(dp[N - 1])
+    print(dp[-1])
