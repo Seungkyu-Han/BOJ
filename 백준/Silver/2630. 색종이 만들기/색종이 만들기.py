@@ -1,33 +1,34 @@
-num = int(input())
+import sys
 
-paper = []
+N = int(sys.stdin.readline().strip())
 
-for i in range(num):
-    paper.append(list(map(int, input().split())))
-
-white = 0
-blue = 0
+paper = [list(map(int, sys.stdin.readline().strip().split())) for _ in range(N)]
 
 
-def mypaper(x, y, n):
-    global white, blue
-    tmp = paper[x][y]
-    for t in range(x, x + n):
-        for j in range(y, y + n):
-            if tmp != paper[t][j]:
-                mypaper(x, y, n//2)
-                mypaper(x, y + n // 2, n // 2)
-                mypaper(x + n // 2, y, n // 2)
-                mypaper(x + n // 2, y + n // 2, n // 2)
-                return
-    if tmp == 0:
-        white += 1
-        return
+def cut_paper(cur_n, cur_x, cur_y):
+    if cur_n == 1:
+        if paper[cur_y][cur_x] == 0:
+            # 하얀색 -1
+            return [1, 0]
+        else:
+            # 파란색 -2
+            return [0, 1]
+
+    length = cur_n // 2
+
+    a = cut_paper(length, cur_x, cur_y)
+    b = cut_paper(length, cur_x, cur_y + length)
+    c = cut_paper(length, cur_x + length, cur_y)
+    d = cut_paper(length, cur_x + length, cur_y + length)
+
+    if a == [1, 0] and b == [1, 0] and c == [1, 0] and d == [1, 0]:
+        return [1, 0]
+    elif a == [0, 1] and b == [0, 1] and c == [0, 1] and d == [0, 1]:
+        return [0, 1]
     else:
-        blue += 1
-        return
+        return [a[0] + b[0] + c[0] + d[0], a[1] + b[1] + c[1] + d[1]]
 
+result = cut_paper(N, 0, 0)
 
-mypaper(0, 0, num)
-print(white)
-print(blue)
+print(result[0])
+print(result[1])
