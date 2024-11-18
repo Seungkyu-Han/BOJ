@@ -2,23 +2,26 @@ import sys
 
 N, M = map(int, sys.stdin.readline().split())
 
-tree = list(map(int, sys.stdin.readline().split()))
+woods = list(map(int, sys.stdin.readline().split()))
 
 
-def cut(height):
+def cut_wood(length):
     result = 0
-    for i in tree:
-        result += max(0, i - height)
+
+    for wood in woods:
+        result += max((wood - length), 0)
     return result
 
 
-left, right = 0, max(tree)
+
+left, right = 0, 2_000_000_000
 
 while left <= right:
     mid = (left + right) // 2
-    cur_height = cut(mid)
 
-    if cur_height >= M:
+    cur_result = cut_wood(mid)
+
+    if cur_result >= M:
         left = mid + 1
     else:
         right = mid - 1
