@@ -1,29 +1,48 @@
 import sys
+from collections import deque
 
-num = int(sys.stdin.readline())
+for _ in range(int(sys.stdin.readline().strip())):
 
-for i in range(num):
-    ans = sys.stdin.readline().strip()
-    input()
-    result = sys.stdin.readline().rstrip()[1:-1].split(',')
-    rev = 1
-    flag = 1
-    if result == ['']:
-        result = []
-    for t in ans:
-        if t == 'R':
-            rev *= -1
+    function = list(sys.stdin.readline().strip())
+
+    n = int(sys.stdin.readline().strip())
+
+    array_input = list(map(str, sys.stdin.readline().strip().replace('[', '').replace(']', '').split(',', )))
+    array = []
+    if n > 0:
+        array = list(map(int, array_input))
+
+    queue = deque(array)\
+
+    isError = False
+    isReverse = False
+
+    for func in function:
+        if func == 'R':
+            isReverse = not isReverse
         else:
-            if len(result) < 1:
-                flag *= 0
-                continue
-            if rev == 1:
-                result.pop(0)
+            if len(queue) <= 0:
+                isError = True
+                break
             else:
-                result.pop()
-    if flag == 0:
+                if isReverse:
+                    queue.pop()
+                else:
+                    queue.popleft()
+
+    if isError:
         print('error')
     else:
-        if rev == -1:
-            result.reverse()
-        print("[" + ",".join(result) + "]")
+        print('[', end='')
+        if isReverse:
+            while queue:
+                print(queue.pop(), end='')
+                if queue:
+                    print(",", end='')
+        else:
+            while queue:
+                print(queue.popleft(), end='')
+                if queue:
+                    print(",", end='')
+
+        print(']\n', end='')
