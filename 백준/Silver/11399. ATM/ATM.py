@@ -1,14 +1,12 @@
 import sys
 
-N = int(sys.stdin.readline().strip())
+N = int(sys.stdin.readline())
 
-P = sorted(list(map(int, sys.stdin.readline().split())))
+people = sorted(list(map(int, sys.stdin.readline().split())))
 
-cur_time = 0
 result = 0
 
-for i in P:
-    cur_time += i
-    result += cur_time
+for i in range(N):
+    result += ((N - i) * people[i])
 
 print(result)
