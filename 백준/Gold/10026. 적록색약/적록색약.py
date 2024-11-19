@@ -1,66 +1,55 @@
-from collections import deque
 import sys
 
-num = int(sys.stdin.readline())
+N = int(sys.stdin.readline())
 
-RGB = []
+graph = [list(sys.stdin.readline().strip()) for _ in range(N)]
 
-for i in range(num):
-    RGB.append(list(sys.stdin.readline().strip()))
+type1_visited = [[False for _ in range(N)] for _ in range(N)]
+type2_visited = [[False for _ in range(N)] for _ in range(N)]
 
-target = (0, 0)
-first_visited = [[True] * num for i in range(num)]
-first_visited[0][0] = False
-first_cnt = 0
 
-while target:
-    first_cnt += 1
-    need_visit = deque()
-    need_visit.append(target)
-    first_visited[target[0]][target[1]] = False
-    target_color = RGB[target[0]][target[1]]
-    while need_visit:
-        n, m = need_visit.popleft()
-        for n_ptr, m_ptr in ((n + 1, m), (n - 1, m), (n, m + 1), (n, m - 1)):
-            if 0 <= n_ptr < num and 0 <= m_ptr < num and first_visited[n_ptr][m_ptr] and RGB[n_ptr][m_ptr] == target_color:
-                first_visited[n_ptr][m_ptr] = False
-                need_visit.append((n_ptr, m_ptr))
-    cnt = 0
-    while cnt < num * num and first_visited[cnt // num][cnt % num] is False:
-        cnt += 1
-    if cnt >= num * num:
-        target = False
-    else:
-        target = (cnt // num, cnt % num)
 
-for i in range(num):
-    for t in range(num):
-        if RGB[i][t] == 'R':
-            RGB[i][t] = 'G'
+type1_result = 0
+type2_result = 0
 
-target = (0, 0)
-second_visited = [[True] * num for i in range(num)]
-second_visited[0][0] = False
-second_cnt = 0
+for i in range(N):
+    for j in range(N):
+        if not type1_visited[i][j]:
 
-while target:
-    second_cnt += 1
-    need_visit = deque()
-    need_visit.append(target)
-    second_visited[target[0]][target[1]] = False
-    target_color = RGB[target[0]][target[1]]
-    while need_visit:
-        n, m = need_visit.popleft()
-        for n_ptr, m_ptr in ((n + 1, m), (n - 1, m), (n, m + 1), (n, m - 1)):
-            if 0 <= n_ptr < num and 0 <= m_ptr < num and second_visited[n_ptr][m_ptr] and RGB[n_ptr][m_ptr] == target_color:
-                second_visited[n_ptr][m_ptr] = False
-                need_visit.append((n_ptr, m_ptr))
-    cnt = 0
-    while cnt < num * num and second_visited[cnt // num][cnt % num] is False:
-        cnt += 1
-    if cnt >= num * num:
-        target = False
-    else:
-        target = (cnt // num, cnt % num)
+            type1_result += 1
 
-print(first_cnt, second_cnt)
+            type1_need_visit = [[i, j]]
+
+            target1 = graph[i][j]
+
+            while type1_need_visit:
+
+                cur_i, cur_j = type1_need_visit.pop()
+
+                for next_i, next_j in [[cur_i - 1, cur_j], [cur_i + 1, cur_j], [cur_i, cur_j - 1], [cur_i, cur_j + 1]]:
+                    if 0 <= next_i < N and 0 <= next_j < N and not type1_visited[next_i][next_j]:
+                        if graph[next_i][next_j] == target1:
+                            type1_visited[next_i][next_j] = True
+                            type1_need_visit.append([next_i, next_j])
+
+
+        if not type2_visited[i][j]:
+
+            type2_result += 1
+
+            type2_need_visit = [[i, j]]
+
+            target2 = graph[i][j]
+
+            while type2_need_visit:
+                cur_i, cur_j = type2_need_visit.pop()
+
+                for next_i, next_j in [[cur_i - 1, cur_j], [cur_i + 1, cur_j], [cur_i, cur_j - 1], [cur_i, cur_j + 1]]:
+                    if 0 <= next_i < N and 0 <= next_j < N and not type2_visited[next_i][next_j]:
+                        if graph[next_i][next_j] == target2 or\
+                            (graph[next_i][next_j] == 'R' and target2 == 'G') or \
+                                (graph[next_i][next_j] == 'G' and target2 == 'R'):
+                            type2_visited[next_i][next_j] = True
+                            type2_need_visit.append([next_i, next_j])
+
+print(f'{type1_result} {type2_result}')
