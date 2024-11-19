@@ -1,35 +1,29 @@
 import sys
 
-
-def fs(graph_dict, start_node):
-    need_visit = [start_node]
-    visited = []
-    while need_visit:
-        tmp = need_visit.pop()
-        if tmp not in visited:
-            visited.append(tmp)
-            need_visit.extend(graph_dict[tmp])
-    return visited
-
-
 N, M = map(int, sys.stdin.readline().split())
 
-graph = dict()
+visited = [False for _ in range(N + 1)]
+graph = {i: [] for i in range(1, N + 1)}
+result = 0
 
-for i in range(N):
-    graph[i+1] = []
+for _ in range(M):
+    u, v = map(int, sys.stdin.readline().split())
+    graph[u].append(v)
+    graph[v].append(u)
 
-for i in range(M):
-    start, end = map(int, sys.stdin.readline().split())
-    graph[start].append(end)
-    graph[end].append(start)
+for vertex in range(1, N + 1):
+    if not visited[vertex]:
 
-result_visited = []
-total = 0
+        result += 1
+        need_visit = [vertex]
+        visited[vertex] = True
 
-for i in range(1, N + 1):
-    if i not in result_visited:
-        total += 1
-        result_visited.extend(fs(graph, i))
+        while need_visit:
+            cur_vertex = need_visit.pop()
 
-print(total)
+            for next_vertex in graph[cur_vertex]:
+                if not visited[next_vertex]:
+                    visited[next_vertex] = True
+                    need_visit.append(next_vertex)
+
+print(result)
