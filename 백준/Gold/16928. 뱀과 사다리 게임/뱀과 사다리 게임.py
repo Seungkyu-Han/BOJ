@@ -1,36 +1,35 @@
-from collections import deque
 import sys
+from collections import deque
 
 N, M = map(int, sys.stdin.readline().split())
 
-ladder = dict()
-snake = dict()
+visited = [float('inf') for _ in range(101)]
+jump = [i for i in range(101)]
 
-for i in range(N):
-    start, end = map(int, sys.stdin.readline().split())
-    ladder[start] = end
+for _ in range(N + M):
+    x, y = map(int, sys.stdin.readline().split())
 
-for i in range(M):
-    start, end = map(int, sys.stdin.readline().split())
-    snake[start] = end
+    jump[x] = y
+
 
 need_visit = deque()
-need_visit.append(1)
-visited = [0] * 101
 
-while visited[100] == 0:
-    cur = need_visit.popleft()
-    for i in range(1, 7):
-        go = cur + i
-        if go > 100 or visited[go] > 0:
-            continue
-        if go in ladder.keys():
-            go = ladder[go]
-        elif go in snake.keys():
-            go = snake[go]
-        if visited[go] > 0:
-            continue
-        visited[go] = visited[cur] + 1
-        need_visit.append(go)
+# position, count
+need_visit.append([1, 0])
 
-print(visited[100])
+while need_visit:
+
+    cur_position, cur_count = need_visit.popleft()
+
+    if cur_position == 100:
+        print(cur_count)
+        break
+
+    for dice in range(1, 7):
+
+        next_position = cur_position + dice
+
+        if 0 < next_position < 101 and visited[next_position] == float('inf'):
+            visited[next_position] = cur_count
+            need_visit.append([jump[next_position], cur_count + 1])
+
