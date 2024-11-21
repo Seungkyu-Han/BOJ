@@ -1,11 +1,16 @@
 import sys
 
-num = int(sys.stdin.readline())
-arr = list(map(int, sys.stdin.readline().strip().split()))
+N = int(sys.stdin.readline())
 
-result = sorted(list(set(arr)))
+array = list(map(int, sys.stdin.readline().split()))
 
-mydict = {result[i]: i for i in range(len(result))}
+sorted_array = sorted(set(array))
+array_dict = dict()
 
-for i in arr:
-    print(mydict[i], end=' ')
+for i in range(len(sorted_array)):
+    array_dict[sorted_array[i]] = i
+
+for i in range(N):
+    print(array_dict[array[i]], end=' ')
+
+print()
