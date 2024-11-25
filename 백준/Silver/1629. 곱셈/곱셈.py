@@ -1,14 +1,14 @@
-import sys
-a,b,c = map(int,sys.stdin.readline().split())
+A, B, C = map(int, input().split())
 
-def multi (a,n):
-  if n == 1:
-      return a%c
-  else:
-      tmp = multi(a,n//2)
-      if n %2 ==0:
-          return (tmp * tmp) % c
-      else:
-          return (tmp  * tmp *a) %c
-          
-print(multi(a,b))
+
+def multiply(x, y, z):
+    if y == 1:
+        return x % z
+    elif y % 2 == 0:
+        result = multiply(x, y // 2, z)
+        return (result * result) % z
+    else:
+        result = multiply(x, y // 2, z)
+        return (result * result * x) % z
+
+print(multiply(A, B, C))
