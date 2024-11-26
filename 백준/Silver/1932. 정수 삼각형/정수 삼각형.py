@@ -1,20 +1,25 @@
 import sys
 
-n = int(sys.stdin.readline())
+N = int(sys.stdin.readline())
 
-max_list = [0 for i in range(n)]
+triangle = []
 
-for i in range(n):
-    level = list(map(int, sys.stdin.readline().split()))
-    cur_max_list = list()
+for _ in range(N):
+    triangle.append(list(map(int, sys.stdin.readline().split())))
 
-    for t in range(i+1):
-        if t == 0:
-            cur_max_list.append(max_list[0] + level[0])
-        elif t == i:
-            cur_max_list.append(max_list[-1] + level[i])
+dp = [0]
+
+for i in range(N):
+    tmp = []
+
+    for j in range(i + 1):
+        if j == 0:
+            tmp.append(dp[0] + triangle[i][j])
+        elif j == i:
+            tmp.append(dp[-1] + triangle[i][j])
         else:
-            cur_max_list.append(max(max_list[t-1], max_list[t]) + level[t])
-    max_list = cur_max_list
+            tmp.append(max(dp[j], dp[j-1]) + triangle[i][j])
 
-print(max(max_list))
+    dp = tmp
+
+print(max(dp))
