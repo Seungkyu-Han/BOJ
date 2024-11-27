@@ -1,45 +1,57 @@
-num = int(input())
+import sys
 
-tree = {chr(i+65): [] for i in range(num)}
+N = int(sys.stdin.readline())
 
-for i in range(num):
-    parent, left, right = map(str, input().split())
-    tree[parent] = [left, right]
+tree = {chr(ord('A') + i): ['.', '.'] for i in range(N)}
 
-pre = []
-mid = []
-fi = []
+for _ in range(N):
+    root, left, right = map(str, sys.stdin.readline().split())
+    tree[root] = [left, right]
 
 
-def case1(target):
-    pre.append(target)
-    if tree[target][0] != '.':
-        case1(tree[target][0])
-    if tree[target][1] != '.':
-        case1(tree[target][1])
-    return
+
+def pre(cur_node):
+
+    cur_left, cur_right = tree[cur_node]
+
+    print(cur_node, end='')
+
+    if cur_left != ".":
+        pre(cur_left)
+
+    if cur_right != ".":
+        pre(cur_right)
 
 
-def case2(target):
-    if tree[target][0] != '.':
-        case2(tree[target][0])
-    mid.append(target)
-    if tree[target][1] != '.':
-        case2(tree[target][1])
+def mid(cur_node):
+
+    cur_left, cur_right = tree[cur_node]
+
+    if cur_left != ".":
+        mid(cur_left)
+
+    print(cur_node, end='')
+
+    if cur_right != ".":
+        mid(cur_right)
 
 
-def case3(target):
-    if tree[target][0] != '.':
-        case3(tree[target][0])
-    if tree[target][1] != '.':
-        case3(tree[target][1])
-    fi.append(target)
+def suf(cur_node):
 
+    cur_left, cur_right = tree[cur_node]
 
-case1('A')
-case2('A')
-case3('A')
+    if cur_left != ".":
+        suf(cur_left)
 
-print(''.join(pre))
-print(''.join(mid))
-print(''.join(fi))
+    if cur_right != ".":
+        suf(cur_right)
+
+    print(cur_node, end='')
+
+pre('A')
+print()
+
+mid('A')
+print()
+
+suf('A')
