@@ -1,20 +1,23 @@
 import sys
 
-num = int(sys.stdin.readline())
+N = int(sys.stdin.readline())
 
-max_result = [0, 0, 0]
-min_result = [0, 0, 0]
+# max, min
+dp = [[0 for _ in range(3)] for _ in range(2)]
 
+for i in range(N):
+    numbers = list(map(int, sys.stdin.readline().split()))
 
-for i in range(num):
-    game = list(map(int, sys.stdin.readline().split()))
-    max_temp1 = max(max_result[0:2]) + game[0]
-    max_temp2 = max(max_result) + game[1]
-    max_temp3 = max(max_result[1:3]) + game[2]
-    max_result = [max_temp1, max_temp2, max_temp3]
-    min_temp1 = min(min_result[0:2]) + game[0]
-    min_temp2 = min(min_result) + game[1]
-    min_temp3 = min(min_result[1:3]) + game[2]
-    min_result = [min_temp1, min_temp2, min_temp3]
+    # max
+    max_1 = max(dp[0][0], dp[0][1]) + numbers[0]
+    max_2 = max(dp[0]) + numbers[1]
+    max_3 = max(dp[0][1], dp[0][2]) + numbers[2]
+    dp[0][0], dp[0][1], dp[0][2] = max_1, max_2, max_3
 
-print(max(max_result), min(min_result))
+    #min
+    min_1 = min(dp[1][0], dp[1][1]) + numbers[0]
+    min_2 = min(dp[1]) + numbers[1]
+    min_3 = min(dp[1][1], dp[1][2]) + numbers[2]
+    dp[1][0], dp[1][1], dp[1][2] = min_1, min_2, min_3
+
+print(f'{max(dp[0])} {min(dp[1])}')
