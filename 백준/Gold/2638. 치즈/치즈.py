@@ -1,51 +1,48 @@
-from collections import deque
 import sys
+from _collections import deque
 
 N, M = map(int, sys.stdin.readline().split())
 
-cheese = []
+cheese = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
 
-for i in range(N):
-    cheese.append(list(map(int, sys.stdin.readline().split())))
+count = 0
 
+for cheese_slice in cheese:
+    count += cheese_slice.count(1)
 
-def solve():
-    tmp = [[0] * M for _ in range(N)]
+result = 0
 
-    tmp[0][0] = -1
-    plus = []
+while count > 0:
+    touched = set()
+    melted = set()
+    visited = [[False for _ in range(M)] for _ in range(N)]
 
     need_visit = deque()
-    need_visit.append((0, 0))
+
+    # n, m
+    need_visit.append([0, 0])
+    visited[0][0] = True
 
     while need_visit:
-        n, m = need_visit.popleft()
 
-        for n_ptr, m_ptr in ((n+1, m), (n-1, m), (n, m+1), (n, m-1)):
-            if 0 <= n_ptr < N and 0 <= m_ptr < M:
-                if tmp[n_ptr][m_ptr] == -1:
-                    continue
-                elif tmp[n_ptr][m_ptr] == 1:
-                    plus.append((n_ptr, m_ptr))
+        cur_n, cur_m = need_visit.popleft()
+
+        for next_n, next_m in [[cur_n - 1, cur_m], [cur_n + 1, cur_m], [cur_n, cur_m - 1], [cur_n, cur_m + 1]]:
+            if 0 <= next_n < N and 0 <= next_m < M and not visited[next_n][next_m]:
+                if cheese[next_n][next_m] == 0:
+                    visited[next_n][next_m] = True
+                    need_visit.append([next_n, next_m])
                 else:
-                    if cheese[n_ptr][m_ptr] == 0:
-                        tmp[n_ptr][m_ptr] = -1
-                        need_visit.append((n_ptr, m_ptr))
+                    if (next_n, next_m) not in touched:
+                        touched.add((next_n, next_m))
                     else:
-                        tmp[n_ptr][m_ptr] += 1
-
-    if not plus:
-        return False
-
-    for n_ptr, m_ptr in plus:
-        cheese[n_ptr][m_ptr] = 0
-
-    return True
+                        melted.add((next_n, next_m))
+                        visited[next_n][next_m] = True
 
 
-cur = 0
+    for melted_n, melted_m in melted:
+        cheese[melted_n][melted_m] = 0
+        count -= 1
+    result += 1
 
-while solve():
-    cur += 1
-    
-print(cur)
+print(result)
