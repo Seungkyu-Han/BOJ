@@ -1,13 +1,17 @@
 import sys
 
-cnt = int(sys.stdin.readline())
-for i in range(cnt):
+for _ in range(int(sys.stdin.readline())):
     n = int(sys.stdin.readline())
-    sticker = [list(map(int, sys.stdin.readline().split())), list(map(int, sys.stdin.readline().split()))]
-    dp = [[0, 0], [0, 0]]
-    for t in range(n):
-        case1 = max(dp[1][-1] + sticker[0][t], dp[1][-2] + sticker[0][t])
-        case2 = max(dp[0][-1] + sticker[1][t], dp[0][-2] + sticker[1][t])
-        dp[0].append(case1)
-        dp[1].append(case2)
+
+    sticker = [list(map(int, sys.stdin.readline().split())) for _ in range(2)]
+
+    dp = [[0, sticker[0][0]], [0, sticker[1][0]]]
+
+    for i in range(1, n):
+        up_sticker = max(dp[1][-1] + sticker[0][i], dp[0][-1])
+        down_sticker = max(dp[0][-1] + sticker[1][i], dp[1][-1])
+
+        dp[0].append(up_sticker)
+        dp[-1].append(down_sticker)
+
     print(max(dp[0][-1], dp[1][-1]))
