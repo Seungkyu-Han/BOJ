@@ -1,19 +1,16 @@
 import sys
 
-N = int(input())
+N = int(sys.stdin.readline())
 
 A = list(map(int, sys.stdin.readline().split()))
 
-result = [[None] for i in range(N)]
+dp = []
 
 for i in range(N):
-    cur_list = [A[i]]
-    for t in range(i):
-        if A[i] > A[t]:
-            if len(cur_list) < len(result[t]) + 1:
-                cur_list = result[t] + [A[i]]
-    result[i] = cur_list
+    result = 1
+    for j in range(i):
+        if dp[j] + 1 > result and A[j] < A[i]:
+            result = dp[j] + 1
+    dp.append(result)
 
-result.sort(key= lambda x : len(x))
-
-print(len(result[-1]))
+print(max(dp))
