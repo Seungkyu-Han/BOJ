@@ -1,27 +1,26 @@
 import sys
-import heapq
 
 n = int(sys.stdin.readline())
+
 m = int(sys.stdin.readline())
 
-graph = [[float('inf')] * (n + 1) for i in range(n + 1)]
-for i in range(n + 1):
-    graph[i][i] = 0
+city = [[float('inf') for _ in range(n)] for _ in range(n)]
 
-for i in range(m):
-    a, b, c = map(int, sys.stdin.readline().split())
-    if graph[a][b] > c:
-        graph[a][b] = c
+for i in range(n):
+    city[i][i] = 0
 
-for i in range(1, n + 1):
-    for t in range(1, n + 1):
-        for k in range(1, n + 1):
-            graph[t][k] = min(graph[t][k], graph[t][i] + graph[i][k])
+for _ in range(m):
+    start, end, weight = map(int, sys.stdin.readline().split())
+    city[start - 1][end - 1] = min(weight, city[start - 1][end - 1]) 
 
-for i in range(1, n + 1):
-    for t in range(1, n + 1):
-        if graph[i][t] == float('inf'):
-            print(0, end = ' ')
-        else:
-            print(graph[i][t], end = ' ')
+
+for index1 in range(n):
+    for index2 in range(n):
+        for index3 in range(n):
+            city[index2][index3] = min(city[index2][index3], city[index2][index1] + city[index1][index3])
+
+
+for i in range(n):
+    for j in range(n):
+        print(city[i][j] if city[i][j] != float('inf') else 0, end=' ')
     print()
