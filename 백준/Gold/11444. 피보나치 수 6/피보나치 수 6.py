@@ -4,36 +4,30 @@ sys.setrecursionlimit(10 ** 6)
 
 n = int(sys.stdin.readline())
 
-memo = dict()
-memo[0] = 0
-memo[1] = 1
-memo[2] = 1
-memo[3] = 2
-memo[4] = 3
+fibonacci_array = {0: 0, 1: 1, 2: 1}
 
 
-def fibo(cur):
-    if cur < 5:
-        tmp = [0, 1, 1, 2, 3]
-        return tmp[cur]
+def fibonacci(cur_n):
+    if cur_n <= 2:
+        return fibonacci_array[cur_n]
 
-    if cur % 2 == 0:
-        if not (cur // 2 in memo):
-            memo[cur // 2] = fibo(cur // 2)
-        if not (cur // 2 - 1 in memo):
-            memo[cur // 2 - 1] = fibo(cur // 2 - 1)
-        case1 = memo[cur // 2]
-        case2 = memo[cur // 2 - 1]
-        return (case1 * (2 * case2 + case1)) % 1000000007
+    if cur_n % 2 == 0:
+        next_index = cur_n // 2
+        if next_index not in fibonacci_array:
+            fibonacci_array[next_index] = fibonacci(next_index)
+
+        if next_index - 1 not in fibonacci_array:
+            fibonacci_array[next_index - 1] = fibonacci(next_index - 1)
+        return (fibonacci_array[next_index] * (2 * fibonacci_array[next_index - 1] + fibonacci_array[next_index])) % 1_000_000_007
     else:
-        tmp = cur + 1
-        if not (tmp // 2 in memo):
-            memo[tmp // 2] = fibo(tmp // 2)
-        if not (tmp // 2 - 1 in memo):
-            memo[tmp // 2 - 1] = fibo(tmp // 2 - 1)
-        case1 = memo[tmp // 2]
-        case2 = memo[tmp // 2 - 1]
-        return (case1 ** 2 + case2 ** 2) % 1000000007
+        next_index = cur_n // 2
+        if next_index not in fibonacci_array:
+            fibonacci_array[next_index] = fibonacci(next_index)
+
+        if next_index + 1 not in fibonacci_array:
+            fibonacci_array[next_index + 1] = fibonacci(next_index + 1)
+
+        return (fibonacci_array[next_index] ** 2 + fibonacci_array[next_index + 1] ** 2) % 1_000_000_007
 
 
-print(fibo(n))
+print(fibonacci(n))
