@@ -2,23 +2,18 @@ import sys
 
 N, M = map(int, sys.stdin.readline().split())
 
-num_list = list(map(int, sys.stdin.readline().split()))
-
-num_list = list(set(num_list))
-num_list.sort()
-
-tmp = []
+candidate = sorted(list(set(map(int, sys.stdin.readline().split()))))
 
 
-def result(start):
-    if len(tmp) == M:
-        print(*tmp)
+def back_tracking(cur_numbers, cur_index, m):
+    if len(cur_numbers) == m:
+        print(*cur_numbers)
         return
 
-    for i in range(len(num_list)):
-        if start == 0 or tmp[-1] <= num_list[i]:
-            tmp.append(num_list[i])
-            result(start + 1)
-            tmp.pop()
+    for index in range(cur_index, len(candidate)):
+        cur_numbers.append(candidate[index])
+        back_tracking(cur_numbers, index, m)
+        cur_numbers.pop()
 
-result(0)
+
+back_tracking([], 0, m = M)
