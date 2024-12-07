@@ -2,22 +2,23 @@ import sys
 
 N, M = map(int, sys.stdin.readline().split())
 
-num_list = list(map(int, sys.stdin.readline().split()))
+candidate = list(map(int, sys.stdin.readline().split()))
 
-num_list.sort()
+candidate.sort()
 
-tmp = []
+def back_tracking(cur_numbers, n, m, visited):
 
-
-def result(start):
-    if len(tmp) == M:
-        print(*tmp)
+    if len(cur_numbers) == m:
+        print(*cur_numbers)
         return
 
-    for i in range(0, N):
-        if num_list[i] not in tmp:
-            tmp.append(num_list[i])
-            result(i)
-            tmp.pop()
+    for index in range(0, n):
+        if visited[index]:
+            continue
+        cur_numbers.append(candidate[index])
+        visited[index] = True
+        back_tracking(cur_numbers, n, m, visited)
+        cur_numbers.pop()
+        visited[index] = False
 
-result(0)
+back_tracking([], N, M, [False for _ in range(N)])
