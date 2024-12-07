@@ -1,48 +1,34 @@
-import heapq
 import sys
+from _collections import deque
 
 N, K = map(int, sys.stdin.readline().split())
 
-if N >= K:
-    print(N - K)
-    print(1)
-else:
-    visited = [float('inf')] * (K + 1)
-    visited[N] = 0
-    need_visit = []
-    heapq.heappush(need_visit, [0, N])
-    result = 0
+result = -1
+result_count = 0
 
-    while need_visit:
+visited = [float('inf') for _ in range(100001)]
+visited[N] = 0
+need_visit = deque()
+#cur_position, cur_count
+need_visit.append([N, 0])
 
-        cur_cnt, loc = heapq.heappop(need_visit)
+while need_visit:
 
-        if visited[K] < cur_cnt:
-            break
+    cur_position, cur_count = need_visit.popleft()
 
-        if visited[loc] < cur_cnt:
-            continue
 
-        for go in (loc - 1, loc + 1, loc * 2):
-            if go < 0:
-                continue
-            elif 0 <= go < K:
-                if cur_cnt + 1 <= visited[go]:
-                    visited[go] = cur_cnt + 1
-                    heapq.heappush(need_visit, [cur_cnt + 1, go])
-            elif go == K:
-                if visited[go] > cur_cnt + 1:
-                    visited[go] = cur_cnt + 1
-                    result = 1
-                elif visited[go] == cur_cnt + 1:
-                    result += 1
-            else:
-                time = go - K + (cur_cnt + 1)
-                if visited[K] > time:
-                    result = 1
-                    visited[K] = time
-                elif visited[K] == time:
-                    result += 1
+    if cur_position == K:
+        if result == -1:
+            result = cur_count
+        result_count += 1
 
-    print(visited[-1])
-    print(result)
+    if 0 < result < cur_count:
+        break
+
+    for next_position in [cur_position - 1, cur_position + 1, cur_position * 2]:
+        if 0 <= next_position <= 100000 and visited[next_position] >= cur_count + 1:
+            visited[next_position] = cur_count + 1
+            need_visit.append([next_position, cur_count + 1])
+
+print(result)
+print(result_count)
