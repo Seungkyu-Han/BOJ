@@ -1,27 +1,30 @@
-from collections import deque
 import sys
 
-num = int(sys.stdin.readline())
+N = int(sys.stdin.readline())
 
-graph = {i + 1: [] for i in range(num)}
+graph = {i + 1: [] for i in range(N)}
 
-for i in range(num - 1):
-    node1, node2 = map(int, sys.stdin.readline().split())
-    graph[node1].append(node2)
-    graph[node2].append(node1)
+parent = {i + 1: 0 for i in range(N)}
+parent[1] = 1
 
-result = [0] * (num + 1)
-need_visit = deque()
-need_visit.append(1)
+for _ in range(N - 1):
+    v1, v2 = map(int, sys.stdin.readline().split())
+
+    graph[v1].append(v2)
+    graph[v2].append(v1)
+
+
+need_visit = [1]
 
 while need_visit:
-    cur = need_visit.popleft()
-    target_list = graph[cur]
-    for i in graph[cur]:
-        if result[i] != 0:
-            continue
-        result[i] = cur
-        need_visit.append(i)
 
-for i in result[2:]:
-    print(i)
+    cur_node = need_visit.pop()
+
+    for next_node in graph[cur_node]:
+        if parent[next_node] == 0:
+            parent[next_node] = cur_node
+            need_visit.append(next_node)
+
+
+for i in range(2, N + 1):
+    print(parent[i])
