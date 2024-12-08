@@ -2,29 +2,32 @@ import sys
 
 n, m, r = map(int, sys.stdin.readline().split())
 
+field = [[float('inf') for _ in range(n)] for _ in range(n)]
+
+for i in range(n):
+    field[i][i] = 0
+
 item = list(map(int, sys.stdin.readline().split()))
 
-flow = [[float('inf')] * n for i in range(n)]
-for i in range(n):
-    flow[i][i] = 0
+for _ in range(r):
+    v1, v2, weight = map(int, sys.stdin.readline().split())
 
-for i in range(r):
-    start, end, t = map(int, sys.stdin.readline().split())
-    flow[start-1][end-1] = min(flow[start-1][end-1], t)
-    flow[end-1][start-1] = min(flow[end-1][start-1], t)
+    field[v1 - 1][v2 - 1] = weight
+    field[v2 - 1][v1 - 1] = weight
 
-for i in range(n):
-    for t in range(n):
-        for k in range(n):
-            flow[t][k] = min(flow[t][k], flow[t][i] + flow[i][k])
+
+for i1 in range(n):
+    for i2 in range(n):
+        for i3 in range(n):
+            field[i2][i3] = min(field[i2][i3], field[i2][i1] + field[i1][i3])
 
 result = 0
 
-for i in range(n):
-    tmp = 0
-    for t in range(n):
-        if flow[i][t] <= m:
-            tmp += item[t]
-    result = max(result, tmp)
+for i1 in range(n):
+    cur_result = 0
+    for i2 in range(n):
+        if field[i1][i2] <= m:
+            cur_result += item[i2]
+    result = max(result, cur_result)
 
 print(result)
