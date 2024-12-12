@@ -1,57 +1,50 @@
-from collections import deque
 import sys
+import heapq
 
-num = int(sys.stdin.readline())
+N = int(sys.stdin.readline())
 
-bowl = []
+size = 2
+feed = 0
+start_y, start_x = -1, -1
 
-for i in range(num):
-    bowl.append(list(map(int, sys.stdin.readline().split())))
+sea = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
 
-cur = [0, 0, 0]
-
-for n in range(num):
-    for m in range(num):
-        if bowl[n][m] == 9:
-            cur = [0, n, m]
-            bowl[n][m] = 0
-
-fish_size = 2
-eat_cnt = 0
-cnt = 0
-
-while True:
-    need_visit = deque()
-    visited = [[True] * num for i in range(num)]
-    visited[cur[1]][cur[2]] = False
-    need_visit.append(cur)
-    result = []
-    while need_visit:
-        cur_cnt, n, m = need_visit.popleft()
-        for n_ptr, m_ptr in ((n - 1, m), (n, m - 1), (n, m + 1), (n + 1, m)):
-            if 0 <= n_ptr < num and 0 <= m_ptr < num and visited[n_ptr][m_ptr]:
-                if bowl[n_ptr][m_ptr] == 0:
-                    visited[n_ptr][m_ptr] = False
-                    need_visit.append([cur_cnt + 1, n_ptr, m_ptr])
-                elif bowl[n_ptr][m_ptr] < fish_size:
-                    result.append([cur_cnt + 1, n_ptr, m_ptr])
-                    visited[n_ptr][m_ptr] = False
-                elif bowl[n_ptr][m_ptr] == fish_size:
-                    visited[n_ptr][m_ptr] = False
-                    need_visit.append([cur_cnt + 1, n_ptr, m_ptr])
-                else:
-                    visited[n_ptr][m_ptr] = False
-    if result:
-        result.sort()
-        result_cnt, result_n, result_m = result[0]
-        bowl[result_n][result_m] = 0
-        cnt += result_cnt
-        eat_cnt += 1
-        if fish_size < 7 and eat_cnt >= fish_size:
-            eat_cnt = 0
-            fish_size += 1
-        cur = [0, result_n, result_m]
-    else:
+for i in range(N):
+    for j in range(N):
+        if sea[i][j] == 9:
+            start_y, start_x = i, j
+            sea[i][j] = 0
+            break
+    if start_y != -1 and start_x != -1:
         break
 
-print(cnt)
+result = 0
+
+need_visit = []
+heapq.heappush(need_visit, [0, start_y, start_x])
+visited = [[False for _ in range(N)] for _ in range(N)]
+visited[start_y][start_x] = True
+
+while need_visit:
+
+    cur_count, cur_y, cur_x = heapq.heappop(need_visit)
+
+    if 0 < sea[cur_y][cur_x] < size:
+        sea[cur_y][cur_x] = 0
+        feed += 1
+        if feed == size:
+            size += 1
+            feed = 0
+        need_visit = []
+        heapq.heappush(need_visit, [0, cur_y, cur_x])
+        visited = [[False for _ in range(N)] for _ in range(N)]
+        visited[cur_y][cur_x] = True
+        result += cur_count
+    else:
+        for next_y, next_x in [[cur_y + 1, cur_x], [cur_y - 1, cur_x], [cur_y, cur_x - 1], [cur_y, cur_x + 1]]:
+            if 0 <= next_y < N and 0 <= next_x < N and not visited[next_y][next_x] and sea[next_y][next_x] <= size:
+                visited[next_y][next_x] = True
+                heapq.heappush(need_visit, [cur_count + 1, next_y, next_x])
+
+
+print(result)
