@@ -1,42 +1,48 @@
 import sys
 
+sys.setrecursionlimit(50)
+
+
 N, M = map(int, sys.stdin.readline().split())
 
-house = []
+city = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
+
 chicken = []
-ret = 100000000
+houses = []
 
-for i in range(N):
-    tmp = list(map(int, sys.stdin.readline().split()))
-    for t in range(N):
-        if tmp[t] == 1:
-            house.append((i, t))
-        elif tmp[t] == 2:
-            chicken.append((i, t))
-
-
-def backtracking(cur_list, cur_index, cur_cnt):
-    if cur_cnt == M:
-        dist(cur_list)
-
-    for k in range(cur_index + 1, len(chicken)):
-        backtracking(cur_list + [chicken[k]], k, cur_cnt + 1)
+for r in range(N):
+    for c in range(N):
+        if city[r][c] == 1:
+            houses.append([r, c])
+        elif city[r][c] == 2:
+            chicken.append([r, c])
 
 
-def dist(cur_list):
-    global ret
+def distances(cur_chicken, param_houses):
 
-    result = 0
+    distances_result = 0
 
-    for k in house:
-        fun_tmp = 2500
-        for q in cur_list:
-            fun_tmp = min(fun_tmp, abs(k[0] - q[0]) + abs(k[1] - q[1]))
-        result += fun_tmp
+    for house_r, house_c in param_houses:
+        each_house_max = float('inf')
+        for chicken_r, chicken_c in cur_chicken:
+            each_house_max = min(each_house_max, abs(house_r - chicken_r) + abs(house_c - chicken_c))
 
-    ret = min(ret, result)
+        distances_result += each_house_max
+    return distances_result
 
 
-backtracking([], -1, 0)
+def back_tracking(cur_chicken, m, cur_index, param_houses):
 
-print(ret)
+    back_tracking_result = float('inf')
+
+    if len(cur_chicken) >= m:
+        return distances(cur_chicken, param_houses)
+
+    for i in range(cur_index + 1, len(chicken)):
+        cur_chicken.append(chicken[i])
+        back_tracking_result = min(back_tracking_result, back_tracking(cur_chicken, m, i, param_houses))
+        cur_chicken.pop()
+
+    return back_tracking_result
+
+print(back_tracking([], M, -1, houses))
