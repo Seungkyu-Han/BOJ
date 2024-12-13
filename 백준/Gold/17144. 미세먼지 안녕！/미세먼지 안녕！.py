@@ -1,65 +1,86 @@
-import sys, copy
+import sys
 
 R, C, T = map(int, sys.stdin.readline().split())
 
-dust = []
-cleaner = ()
+room = []
+
+fresher = []
 
 for i in range(R):
-    dust.append(list(map(int, sys.stdin.readline().split())))
+    cur_row = list(map(int, sys.stdin.readline().split()))
 
-for i in range(R):
-    if dust[i][0] == -1:
-        cleaner = (i, i + 1)
-        break
+    if cur_row[0] == -1:
+        fresher.append(i)
 
+    room.append(cur_row)
 
-def spread(dust_list):
-    result = [[0] * C for _ in range(R)]
-    for t in range(R):
-        for k in range(C):
-            if dust_list[t][k] > 0:
-                cnt = 0
-                for x_ptr, y_ptr in ((t - 1, k), (t + 1, k), (t, k - 1), (t, k + 1)):
-                    if 0 <= x_ptr < R and 0 <= y_ptr < C:
-                        if y_ptr == 0 and (x_ptr in cleaner):
-                            continue
-                        result[x_ptr][y_ptr] += dust_list[t][k] // 5
-                        cnt += 1
-                result[t][k] += (dust[t][k] - ((dust[t][k] // 5) * cnt))
-    return result
-
-
-def clean_up(dust_list):
-    result = copy.deepcopy(dust_list)
-    # up
-    result[cleaner[0]] = [0] + dust_list[cleaner[0]][:-1]
-    for t in range(cleaner[0]):
-        result[t][-1] = dust_list[t + 1][-1]
-    result[0][:-1] = dust_list[0][1:]
-    for t in range(cleaner[0]):
-        result[t+1][0] = dust_list[t][0]
-    # down
-    result[cleaner[1]] = [0] + dust_list[cleaner[1]][:-1]
-    for t in range(R - cleaner[1] - 1):
-        result[cleaner[1] + t + 1][-1] = dust_list[cleaner[1] + t][-1]
-    result[-1][:-1] = dust_list[-1][1:]
-    for t in range(R - cleaner[1] - 1):
-        result[R - 2 - t][0] = dust_list[R - 1 - t][0]
-
-    result[cleaner[0]][0], result[cleaner[1]][0] = -1, -1
-    return result
 
 
 for i in range(T):
-    dust = spread(dust)
-    dust = clean_up(dust)
+    # spread
+    cur_room = [[0 for _ in range(C)] for _ in range(R)]
+    cur_room[fresher[0]][0] = -1
+    cur_room[fresher[1]][0] = -1
 
-dust[cleaner[0]][0], dust[cleaner[1]][0] = 0, 0
+    for r in range(R):
+        for c in range(C):
+            if room[r][c] == -1 or room[r][c] == 0:
+                continue
+            spread_count = 0
+            for next_r, next_c in [[r + 1, c], [r - 1, c], [r, c + 1], [r, c - 1]]:
+                if 0 <= next_r < R and 0 <= next_c < C and room[next_r][next_c] != -1:
+                    cur_room[next_r][next_c] += (room[r][c]//5)
+                    spread_count += 1
+            cur_room[r][c] += (room[r][c] - (room[r][c] //5 ) * spread_count)
+
+    room = cur_room[:][:]
+
+    # spin
+
+    # up fresher
+    # up, down
+    for r in range(fresher[0] - 1, -1, -1):
+        room[r + 1][0] = room[r][0]
+
+    # up, left
+    for c in range(1, C):
+        room[0][c - 1] = room[0][c]
+
+    # up, up
+    for r in range(1, fresher[0] + 1):
+        room[r - 1][C - 1] = room[r][C - 1]
+
+    # up, right
+    for c in range(C - 1, 1, -1):
+        room[fresher[0]][c] = room[fresher[0]][c - 1]
+
+    room[fresher[0]][0] = -1
+    room[fresher[0]][1] = 0
+
+    # down fresher
+    # down, up
+    for r in range(fresher[1] + 1, R):
+        room[r - 1][0] = room[r][0]
+
+    # down, left
+    for c in range(1, C):
+        room[R - 1][c - 1] = room[R - 1][c]
+
+    # down, down
+    for r in range(R - 2, fresher[1] - 1, -1):
+        room[r + 1][C - 1] = room[r][C - 1]
+
+    # down, right
+    for c in range(C - 1, 1, -1):
+        room[fresher[1]][c] = room[fresher[1]][c - 1]
+
+    room[fresher[1]][0] = -1
+    room[fresher[1]][1] = 0
+
 result = 0
 
-for q in range(R):
-    for w in range(C):
-        result += dust[q][w]
-
+for r in range(R):
+    for c in range(C):
+        if 0 < room[r][c]:
+            result += room[r][c]
 print(result)
