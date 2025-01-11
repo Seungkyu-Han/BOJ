@@ -1,6 +1,6 @@
 # [level 2] 혼자서 하는 틱택토 - 160585 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/160585) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/160585#qna) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 01월 12일 01:09:42
+2025년 01월 12일 01:10:03
 
 ### 문제 설명
 
