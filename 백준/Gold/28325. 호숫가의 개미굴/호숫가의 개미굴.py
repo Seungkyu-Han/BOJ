@@ -1,25 +1,43 @@
 import sys
+import math
 
 N = int(sys.stdin.readline())
 
 C = list(map(int, sys.stdin.readline().split()))
 
-visited = [False for _ in range(N)]
 
-result = 0
+def solve(n, c):
+    total = sum(c)
 
-for i in range(N):
+    if total == 0:
+        return n // 2
 
-    if C[i] > 0:
-        result += C[i]
-        continue
+    start_index = 0
 
-    left, right = i - 1 if i - 1 >= 0 else N - 1, i + 1 if i + 1 < N else 0
+    for i in range(n):
+        if c[i] > 0:
+            start_index = i
+            break
 
-    if visited[left] or visited[right]:
-        continue
-    else:
-        visited[i] = True
-        result += 1
+    result = 0
+    cur_length = 0
 
-print(result)
+    for i in range(start_index + 1, n):
+        if c[i] == 0:
+            cur_length += 1
+        else:
+            result += c[i]
+            result += math.ceil(cur_length / 2)
+            cur_length = 0
+
+    for i in range(start_index + 1):
+        if c[i] == 0:
+            cur_length += 1
+        else:
+            result += c[i]
+            result += math.ceil(cur_length / 2)
+            cur_length = 0
+
+    return result
+
+print(solve(N, C))
