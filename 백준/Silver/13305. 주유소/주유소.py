@@ -1,18 +1,14 @@
-num = int(input())
+import sys
 
-km = list(map(int, input().split()))
-oil = list(map(int, input().split()))
+N = int(sys.stdin.readline())
 
-total = 0
-ptr = 0
+distance = list(map(int, sys.stdin.readline().split()))
 
-while ptr < num - 1:
-    length = km[ptr]
-    go = 1
-    while oil[ptr] < oil[ptr + go] and ptr + go < num:
-        length += km[ptr + go]
-        go += 1
-    total += (length * oil[ptr])
-    ptr += go
+fuel = list(map(int, sys.stdin.readline().split()))
 
-print(total)
+min_fuel = [fuel[0] for _ in range(N - 1)]
+
+for i in range(1, N - 1):
+    min_fuel[i] = min(fuel[i], min_fuel[i - 1])
+
+print(sum([distance[i] * min_fuel[i] for i in range(N - 1)]))
