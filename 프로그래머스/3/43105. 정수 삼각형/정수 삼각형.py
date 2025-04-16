@@ -1,18 +1,17 @@
 def solution(triangle):
     answer = 0
+    length = len(triangle)
     
-    dp = [triangle[0][0]]
+    dp = [[0 for _ in range(length)] for _ in range(length)]
+    dp[0][0] = triangle[0][0]
     
-    for tri in range(1, len(triangle)):
-        cur_dp = []
-        for i in range(tri + 1):
-            if i == 0:
-                cur_dp.append(dp[0] + triangle[tri][i])
-            elif i == tri:
-                cur_dp.append(dp[-1] + triangle[tri][i])
+    for i in range(1, length):
+        for j in range(i + 1):
+            if j == 0:
+                dp[i][j] = dp[i - 1][0] + triangle[i][j]
+            elif j == i:
+                dp[i][j] = dp[i - 1][j - 1] + triangle[i][j]
             else:
-                cur_dp.append(max(dp[i], dp[i - 1]) + triangle[tri][i])
-        dp = cur_dp.copy()
-                
-    answer = max(dp)
-    return answer
+                dp[i][j] = max(dp[i - 1][j - 1], dp[i - 1][j]) + triangle[i][j]
+    
+    return max(dp[-1])
